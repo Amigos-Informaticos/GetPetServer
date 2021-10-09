@@ -1,0 +1,244 @@
+openapi: 3.0.0
+info:
+  title: PetMeAPI
+  description: Especificación de la API que expone los servicios provistos por el servidor de PetMe
+  version: 0.0.1
+  contact:
+    name: Edson Manuel Carballo Vera
+    email: edsonmanuelcarballovera@gmail.com
+    url: 'https://twitter.com/EdsonManuelVera'
+servers:
+  - description: Producción
+    url: 'http://amigosinformaticos.ddns.net:42070'
+paths:
+  /login:
+    description: Endpoint para que los usuarios puedan inicar sesion
+    post:
+      summary: Crea una nueva sesion del usuario en el sistema
+      tags:
+        - Usuario general
+      operationId: login
+      requestBody:
+        description: Credenciales para iniciar sesion
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                  type: string
+                  minLength: 5
+                  maxLength: 320
+                  example: correo@correo.com
+                password:
+                  type: string
+                  minLength: 8
+                  maxLength: 100
+                  example: contraChida
+        required: true
+      responses:
+        '200':
+          description: El usuario ha iniciado sesion exitosamente
+          content:
+            application/json:
+              schema:
+                properties:
+                  token:
+                    description: Token identificador del usuario
+                    type: string
+                  id:
+                    description: id del comensal
+                    type: integer
+                    format: int32
+                    minimum: 1
+                    maximum: 999
+                    example: 24
+        '400':
+          description: Peticion erronea o malformada
+        '404':
+          description: El usuario no se encuentra registrado
+        '406':
+          description: La solicitud no es aceptable por falta de valores
+  /adoptantes:
+    description: Catalogo de adoptantes registrados
+    post:
+      summary: Registra un nuevo adoptante
+      tags:
+        - Adoptante
+      operationId: registrarAdoptante
+      requestBody:
+        description: Informacion del nuevo adoptante
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/paths/~1adoptantes/post/responses/201/content/application~1json/schema'
+              properties:
+                localidad:
+                  type: integer
+                  format: int32
+                  minimum: 1
+                  maximum: 999
+                  example: 12
+                estado:
+                  type: integer
+                  format: int32
+                  minimum: 1
+                  maximum: 32
+                  example: 28
+                vivienda:
+                  type: string
+                  minLength: 3
+                  maxLength: 150
+                  example: Un ranchito
+        required: true
+      responses:
+        '201':
+          description: Adoptante registrado
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    description: Una persona
+                    properties:
+                      id_persona:
+                        description: Identificador numerico del persona
+                        type: integer
+                        format: int32
+                        minimum: 1
+                        maximum: 999
+                        example: 34
+                      nombre:
+                        description: El nombre de la persona
+                        type: string
+                        minLength: 3
+                        maxLength: 40
+                        example: Miguel Joaquin
+                      apellido_paterno:
+                        description: El apellido paterno de la persona
+                        type: string
+                        minLength: 3
+                        maxLength: 35
+                        example: Perez
+                      apellido_materno:
+                        description: El apellido materno de la persona
+                        type: string
+                        minLength: 3
+                        maxLength: 35
+                        example: Arriaga
+                      telefono:
+                        description: Numero telefonico de la persona
+                        type: string
+                        minLength: 8
+                        maxLength: 14
+                        example: 22 91 55 55 55
+                      email:
+                        description: Direccion de correo de la persona
+                        type: string
+                        minLength: 5
+                        maxLength: 320
+                        example: correo@correo.com
+                      password:
+                        description: Contraseña de la persona
+                        type: string
+                        minLength: 8
+                        maxLength: 32
+                        example: contraChida
+                      fecha_nacimiento:
+                        description: Fecha de nacimiento de la persona
+                        type: string
+                        format: date
+                        example: 1999-07-19T00:00:00.000Z
+                      sexo:
+                        description: Sexo de la persona
+                        type: boolean
+                        example: 0
+                      localidad:
+                        type: object
+                        description: Localidad
+                        properties:
+                          id_localidad:
+                            description: Identificador de la localidad
+                            type: integer
+                            format: int32
+                            minimum: 0
+                            maximum: 999
+                            example: 12
+                          localidad:
+                            description: Nombre de la localidad
+                            type: string
+                            minLength: 3
+                            maxLength: 150
+                            example: Tlanelhuayocan
+                      estado:
+                        type: object
+                        description: Un estado de la republica
+                        properties:
+                          id_estado:
+                            description: Identificador del estado
+                            type: integer
+                            format: int32
+                            minimum: 0
+                            maximum: 32
+                            example: 28
+                          estado:
+                            description: Nombre del estado
+                            type: string
+                            minLength: 3
+                            maxLength: 50
+                            example: Veracruz
+                type: object
+                description: Un adoptante
+                properties:
+                  vivienda:
+                    type: object
+                    description: Informacion de una vivienda
+                    properties:
+                      id_vivienda:
+                        description: Identificador de la vivienda
+                        type: integer
+                        format: int32
+                        minimum: 0
+                        maximum: 999
+                        example: 435
+                      tipo:
+                        description: Tipo de vivienda
+                        type: string
+                        minLength: 3
+                        maxLength: 100
+                        example: Un ranchito
+        '400':
+          description: Peticion erronea o malformada
+        '409':
+          description: El adoptante ya ha sido registrado previamente
+  '/adoptantes/{id_adoptante}':
+    description: Un adoptante identificado por su id
+    get:
+      summary: Retorna la informacion del comensal seleccionado
+      tags:
+        - Adoptante
+      operationId: obtenerAdoptante
+      parameters:
+        - name: id_adoptante
+          description: Id del adoptante cuya informacion se desea recuperar
+          in: path
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 999
+          required: true
+      responses:
+        '200':
+          description: Se ha retornado la informacion correspondiente al adoptante
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1adoptantes/post/responses/201/content/application~1json/schema'
+        '400':
+          description: Peticion erronea o malformada
+        '401':
+          description: Usuario no autenticado
+        '404':
+          description: El adoptante buscado no se encuentra registrado
+        '419':
+          description: La sesion del usuario ha expirado
