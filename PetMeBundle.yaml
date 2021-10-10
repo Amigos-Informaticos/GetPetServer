@@ -179,6 +179,18 @@ paths:
             minimum: 1
             maximum: 999
           required: true
+      requestBody:
+        description: Datos requeridos del adoptante
+        content:
+          application/json:
+            schema:
+              type: array
+              description: Arreglo con los nombres de las propiedades que se desean retornar
+              items:
+                type: string
+              example:
+                - id_adoptante
+                - nombre
       responses:
         '200':
           description: Se ha retornado la informacion correspondiente al adoptante
