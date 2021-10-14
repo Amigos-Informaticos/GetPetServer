@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: PetMeAPI
   description: Especificación de la API que expone los servicios provistos por el servidor de PetMe
-  version: 0.2.0
+  version: 0.3.0
   contact:
     name: Edson Manuel Carballo Vera
     email: edsonmanuelcarballovera@gmail.com
@@ -108,9 +108,9 @@ paths:
                 description: Arreglo de adoptantes
                 items:
                   anyOf:
-                    - $ref: '#/paths/~1adoptantes~1%7Bid_adoptante%7D/post/requestBody/content/application~1json/schema'
-                    - $ref: '#/paths/~1adoptantes~1%7Bid_adoptante%7D/post/requestBody/content/application~1json/schema'
-                    - $ref: '#/paths/~1adoptantes~1%7Bid_adoptante%7D/post/requestBody/content/application~1json/schema'
+                    - $ref: '#/paths/~1adoptantes/post/requestBody/content/application~1json/schema'
+                    - $ref: '#/paths/~1adoptantes/post/requestBody/content/application~1json/schema'
+                    - $ref: '#/paths/~1adoptantes/post/requestBody/content/application~1json/schema'
         '204':
           description: No se ha encontrado ninguna coincidencia
         '400':
@@ -119,115 +119,10 @@ paths:
       summary: Registra un nuevo adoptante
       tags:
         - Adoptante
+        - Registrar
       operationId: registrarAdoptante
       requestBody:
         description: Informacion del nuevo adoptante
-        content:
-          application/json:
-            schema:
-              allOf:
-                - $ref: '#/paths/~1adoptantes~1%7Bid_adoptante%7D/post/requestBody/content/application~1json/schema'
-              properties:
-                localidad:
-                  type: integer
-                  format: int32
-                  minimum: 1
-                  maximum: 999
-                  example: 12
-                estado:
-                  type: integer
-                  format: int32
-                  minimum: 1
-                  maximum: 32
-                  example: 28
-                vivienda:
-                  type: string
-                  minLength: 3
-                  maxLength: 150
-                  example: Un ranchito
-        required: true
-      responses:
-        '201':
-          description: Adoptante registrado
-          content:
-            application/json:
-              schema:
-                $ref: '#/paths/~1adoptantes~1%7Bid_adoptante%7D/post/requestBody/content/application~1json/schema'
-          links:
-            ObtenerInfoAdoptante:
-              operationId: obtenerAdoptante
-              description: El id devuelto en esta operacion se usa para obtener la informacion del adoptante
-              parameters:
-                id_adoptante: $response.body#/id_persona
-        '400':
-          description: Peticion erronea o malformada
-        '409':
-          description: El adoptante ya ha sido registrado previamente
-  '/adoptantes/{id_adoptante}':
-    description: Un adoptante identificado por su id
-    get:
-      summary: Retorna la informacion del comensal seleccionado
-      tags:
-        - Adoptante
-      operationId: obtenerAdoptante
-      parameters:
-        - name: id_adoptante
-          description: Id del adoptante cuya informacion se desea recuperar
-          in: path
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 999
-          required: true
-      requestBody:
-        description: Datos requeridos del adoptante
-        content:
-          application/json:
-            schema:
-              type: array
-              description: Arreglo con los nombres de las propiedades que se desean retornar
-              items:
-                type: string
-              example:
-                - id_adoptante
-                - nombre
-      responses:
-        '200':
-          description: Se ha retornado la informacion correspondiente al adoptante
-          content:
-            application/json:
-              schema:
-                $ref: '#/paths/~1adoptantes~1%7Bid_adoptante%7D/post/requestBody/content/application~1json/schema'
-        '400':
-          description: Peticion erronea o malformada
-        '401':
-          description: Usuario no autenticado
-        '404':
-          description: El adoptante buscado no se encuentra registrado
-        '419':
-          description: La sesion del usuario ha expirado
-    post:
-      summary: Actualiza la informacion de un adoptante identificado por su id
-      tags:
-        - Adoptante
-      operationId: actualizarAdoptante
-      parameters:
-        - name: id_adoptante
-          description: Id del adoptante cuya informacion se desea recuperar
-          in: path
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 999
-          required: true
-        - name: Token
-          description: Token identificador del adoptante loggeado
-          in: header
-          schema:
-            type: string
-          required: true
-      requestBody:
-        description: Informacion del adoptante actualizado
         content:
           application/json:
             schema:
@@ -263,17 +158,9 @@ paths:
                       maxLength: 35
                       example: Arriaga
                     telefono:
-                      description: Numero telefonico de la persona
-                      type: string
-                      minLength: 8
-                      maxLength: 14
-                      example: 22 91 55 55 55
+                      $ref: '#/paths/~1refugios/post/requestBody/content/application~1json/schema/properties/telefono'
                     email:
-                      description: Direccion de correo de la persona
-                      type: string
-                      minLength: 5
-                      maxLength: 320
-                      example: correo@correo.com
+                      $ref: '#/paths/~1refugios/post/requestBody/content/application~1json/schema/properties/email'
                     password:
                       description: Contraseña de la persona
                       type: string
@@ -290,43 +177,9 @@ paths:
                       type: boolean
                       example: 0
                     localidad:
-                      type: object
-                      description: Localidad
-                      required:
-                        - id_localidad
-                      properties:
-                        id_localidad:
-                          description: Identificador de la localidad
-                          type: integer
-                          format: int32
-                          minimum: 0
-                          maximum: 999
-                          example: 12
-                        localidad:
-                          description: Nombre de la localidad
-                          type: string
-                          minLength: 3
-                          maxLength: 150
-                          example: Tlanelhuayocan
+                      $ref: '#/paths/~1refugios/post/requestBody/content/application~1json/schema/properties/localidad'
                     estado:
-                      type: object
-                      description: Un estado de la republica
-                      required:
-                        - id_estado
-                      properties:
-                        id_estado:
-                          description: Identificador del estado
-                          type: integer
-                          format: int32
-                          minimum: 0
-                          maximum: 32
-                          example: 28
-                        estado:
-                          description: Nombre del estado
-                          type: string
-                          minLength: 3
-                          maxLength: 50
-                          example: Veracruz
+                      $ref: '#/paths/~1refugios/post/requestBody/content/application~1json/schema/properties/estado'
               type: object
               description: Un adoptante
               properties:
@@ -349,13 +202,107 @@ paths:
                       minLength: 3
                       maxLength: 100
                       example: Un ranchito
+        required: true
+      responses:
+        '201':
+          description: Adoptante registrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1adoptantes/post/requestBody/content/application~1json/schema'
+          links:
+            ObtenerInfoAdoptante:
+              operationId: obtenerAdoptante
+              description: El id devuelto en esta operacion se usa para obtener la informacion del adoptante
+              parameters:
+                id_adoptante: $response.body#/id_persona
+        '400':
+          description: Peticion erronea o malformada
+        '409':
+          description: El adoptante ya ha sido registrado previamente
+  '/adoptantes/{id_adoptante}':
+    description: Un adoptante identificado por su id
+    get:
+      summary: Retorna la informacion del comensal seleccionado
+      tags:
+        - Adoptante
+      operationId: obtenerAdoptante
+      parameters:
+        - name: id_adoptante
+          description: Id del adoptante cuya informacion se desea recuperar
+          in: path
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 999
+          required: true
+        - name: Token
+          description: Token identificador del adoptante loggeado
+          in: header
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: Datos solicitados del adoptante
+        content:
+          application/json:
+            schema:
+              type: array
+              description: Arreglo con los nombres de las propiedades que se desean retornar
+              items:
+                type: string
+              example:
+                - id_adoptante
+                - nombre
+      responses:
+        '200':
+          description: Se ha retornado la informacion correspondiente al adoptante
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1adoptantes/post/requestBody/content/application~1json/schema'
+        '400':
+          description: Peticion erronea o malformada
+        '401':
+          description: Usuario no autenticado
+        '404':
+          description: El adoptante buscado no se encuentra registrado
+        '419':
+          description: La sesion del usuario ha expirado
+    post:
+      summary: Actualiza la informacion de un adoptante identificado por su id
+      tags:
+        - Adoptante
+        - Actualizar
+      operationId: actualizarAdoptante
+      parameters:
+        - name: id_adoptante
+          description: Id del adoptante cuya informacion se desea actualizar
+          in: path
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 999
+          required: true
+        - name: Token
+          description: Token identificador del adoptante loggeado
+          in: header
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: Informacion del adoptante actualizado
+        content:
+          application/json:
+            schema:
+              $ref: '#/paths/~1adoptantes/post/requestBody/content/application~1json/schema'
       responses:
         '200':
           description: Se ha actualizado la informacion del adoptante
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1adoptantes~1%7Bid_adoptante%7D/post/requestBody/content/application~1json/schema'
+                $ref: '#/paths/~1adoptantes/post/requestBody/content/application~1json/schema'
         '400':
           description: Peticion erronea o malformada
         '401':
@@ -368,6 +315,7 @@ paths:
       summary: Elimina un adoptante registrado
       tags:
         - Adoptante
+        - Eliminar
       operationId: eliminarAdoptante
       parameters:
         - name: id_adoptante
@@ -387,6 +335,293 @@ paths:
       responses:
         '200':
           description: Se ha eliminado el adoptante indicado
+        '400':
+          description: Peticion erronea o malformada
+        '401':
+          description: Usuario no autenticado
+        '404':
+          description: El adoptante indicado no se encuentra registrado
+        '419':
+          description: La sesion del usuario ha expirado
+  /refugios:
+    description: Catalogo de refugios registrados
+    get:
+      summary: Retorna los refugios que coincidan con algun parametro
+      tags:
+        - Refugio
+      operationId: obtenerRefugios
+      parameters:
+        - name: nombre
+          description: Nombre del refugio
+          in: query
+          schema:
+            type: string
+            minLength: 3
+            maxLength: 100
+          required: false
+        - name: estado
+          description: Estado donde se ubica el refugio
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 32
+          required: false
+        - name: localidad
+          description: Localidad en donde se ubica el refugio
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 999
+          required: false
+      responses:
+        '200':
+          description: Se ha encontrado por lo menos un refugio que coincide con un criterio
+          content:
+            application/json:
+              schema:
+                type: array
+                description: Arreglo de refugios
+                items:
+                  anyOf:
+                    - $ref: '#/paths/~1refugios/post/requestBody/content/application~1json/schema'
+                    - $ref: '#/paths/~1refugios/post/requestBody/content/application~1json/schema'
+                    - $ref: '#/paths/~1refugios/post/requestBody/content/application~1json/schema'
+        '204':
+          description: No se ha encontrado ninguna coincidencia
+        '400':
+          description: Peticion erronea o malformada
+    post:
+      summary: Registra un nuevo refugio
+      tags:
+        - Refugio
+        - Registrar
+      operationId: registrarRefugio
+      requestBody:
+        description: Informacion del refugio que se desea registrar
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Un refugio para
+              required:
+                - nombre
+              properties:
+                id_refugio:
+                  description: Identificador del refugio
+                  type: integer
+                  format: int32
+                  minimum: 0
+                  maximum: 999
+                  example: 62
+                nombre:
+                  description: Nombre del refugio
+                  type: string
+                  minLength: 3
+                  maxLength: 100
+                  example: Refugio patitas
+                estado:
+                  type: object
+                  description: Un estado de la republica
+                  required:
+                    - id_estado
+                  properties:
+                    id_estado:
+                      description: Identificador del estado
+                      type: integer
+                      format: int32
+                      minimum: 0
+                      maximum: 32
+                      example: 28
+                    estado:
+                      description: Nombre del estado
+                      type: string
+                      minLength: 3
+                      maxLength: 50
+                      example: Veracruz
+                localidad:
+                  type: object
+                  description: Localidad
+                  required:
+                    - id_localidad
+                  properties:
+                    id_localidad:
+                      description: Identificador de la localidad
+                      type: integer
+                      format: int32
+                      minimum: 0
+                      maximum: 999
+                      example: 12
+                    localidad:
+                      description: Nombre de la localidad
+                      type: string
+                      minLength: 3
+                      maxLength: 150
+                      example: Tlanelhuayocan
+                direccion:
+                  description: Direccion del refugio
+                  type: string
+                  minLength: 10
+                  maxLength: 200
+                  example: Calle Huitlacoche
+                pagina_web:
+                  description: Pagina web del refugio
+                  type: string
+                  minLength: 5
+                  maxLength: 200
+                  example: www.refugiopatitas.com
+                telefono:
+                  description: Numero telefonico
+                  type: string
+                  minLength: 8
+                  maxLength: 14
+                  example: 22 91 55 55 55
+                email:
+                  description: Direccion de correo
+                  type: string
+                  minLength: 5
+                  maxLength: 320
+                  example: correo@correo.com
+                fundacion:
+                  description: Fundacion a la cual pertenece el refugio
+                  type: string
+                  minLength: 5
+                  maxLength: 150
+                  example: Ayuda a mastocas en necesidad
+        required: true
+      responses:
+        '201':
+          description: Refugio registrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1refugios/post/requestBody/content/application~1json/schema'
+        '400':
+          description: Peticion erronea o malformada
+        '409':
+          description: El refugio ya ha sido registrado previamente
+  '/refugios/{id_refugio}':
+    description: Un refugio identificado por su id
+    get:
+      summary: Retorna la informacion del refugio seleccionado
+      tags:
+        - Refugio
+      operationId: obtenerRefugio
+      parameters:
+        - name: id_refugio
+          description: Id del refugio cuya informacion se desea recuperar
+          in: path
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 999
+          required: true
+        - name: Token
+          description: Token identificador del adoptante loggeado
+          in: header
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: Datos solicitados del refugio
+        content:
+          application/json:
+            schema:
+              description: Arreglo con los nombres de las propiedades que se desean retornar
+              type: array
+              items:
+                type: string
+              example:
+                - id_refugio
+                - nombre
+                - email
+      responses:
+        '200':
+          description: Se ha retornado la informacion correspondiente al refugio
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1refugios/post/requestBody/content/application~1json/schema'
+        '400':
+          description: Peticion erronea o malformada
+        '401':
+          description: Usuario no autenticado
+        '404':
+          description: El adoptante buscado no se encuentra registrado
+        '419':
+          description: La sesion del usuario ha expirado
+    post:
+      summary: Actualiza la informacion de un refugio identificado por su id
+      tags:
+        - Refugio
+        - Actualizar
+      operationId: actualizarRefugio
+      parameters:
+        - name: id_refugio
+          description: Id del refugio cuya informacion se desea actualizar
+          in: path
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 999
+          required: true
+        - name: Token
+          description: Token identificador del adoptante loggeado
+          in: header
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: Informacion del refugio actualizada
+        content:
+          application/json:
+            schema:
+              $ref: '#/paths/~1refugios/post/requestBody/content/application~1json/schema'
+      responses:
+        '200':
+          description: Se ha actualizado la informacion del refugio
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1refugios/post/requestBody/content/application~1json/schema'
+        '400':
+          description: Peticion erronea o malformada
+        '401':
+          description: Usuario no autenticado
+        '404':
+          description: El adoptante no se encuentra registrado
+        '419':
+          description: La sesion del usuario ha expirado
+    delete:
+      summary: Elimina un refugio identificado por su id
+      tags:
+        - Refugio
+        - Eliminar
+      operationId: eliminarRefugio
+      parameters:
+        - name: id_refugio
+          description: Id del refugio cuya informacion se desea actualizar
+          in: path
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 999
+          required: true
+        - name: Token
+          description: Token identificador del adoptante loggeado
+          in: header
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Se ha eliminado el refugio indicado
         '400':
           description: Peticion erronea o malformada
         '401':
