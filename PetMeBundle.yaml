@@ -131,6 +131,7 @@ paths:
                   description: Una persona
                   required:
                     - nombre
+                    - sexo
                   properties:
                     id_persona:
                       description: Identificador numerico del persona
