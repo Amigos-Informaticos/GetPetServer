@@ -108,9 +108,9 @@ paths:
                 description: Arreglo de adoptantes
                 items:
                   anyOf:
-                    - $ref: '#/paths/~1adoptantes/post/requestBody/content/application~1json/schema'
-                    - $ref: '#/paths/~1adoptantes/post/requestBody/content/application~1json/schema'
-                    - $ref: '#/paths/~1adoptantes/post/requestBody/content/application~1json/schema'
+                    - $ref: '#/paths/~1adoptantes/post/responses/201/content/application~1json/schema'
+                    - $ref: '#/paths/~1adoptantes/post/responses/201/content/application~1json/schema'
+                    - $ref: '#/paths/~1adoptantes/post/responses/201/content/application~1json/schema'
         '204':
           description: No se ha encontrado ninguna coincidencia
         '400':
@@ -127,82 +127,27 @@ paths:
           application/json:
             schema:
               allOf:
-                - type: object
-                  description: Una persona
-                  required:
-                    - nombre
-                    - sexo
-                  properties:
-                    id_persona:
-                      description: Identificador numerico del persona
-                      type: integer
-                      format: int32
-                      minimum: 1
-                      maximum: 999
-                      example: 34
-                    nombre:
-                      description: El nombre de la persona
-                      type: string
-                      minLength: 3
-                      maxLength: 40
-                      example: Miguel Joaquin
-                    apellido_paterno:
-                      description: El apellido paterno de la persona
-                      type: string
-                      minLength: 3
-                      maxLength: 35
-                      example: Perez
-                    apellido_materno:
-                      description: El apellido materno de la persona
-                      type: string
-                      minLength: 3
-                      maxLength: 35
-                      example: Arriaga
-                    telefono:
-                      $ref: '#/paths/~1refugios/post/requestBody/content/application~1json/schema/properties/telefono'
-                    email:
-                      $ref: '#/paths/~1refugios/post/requestBody/content/application~1json/schema/properties/email'
-                    password:
-                      description: Contraseña de la persona
-                      type: string
-                      minLength: 8
-                      maxLength: 32
-                      example: contraChida
-                    fecha_nacimiento:
-                      description: Fecha de nacimiento de la persona
-                      type: string
-                      format: date
-                      example: 1999-07-19T00:00:00.000Z
-                    sexo:
-                      description: Sexo de la persona
-                      type: boolean
-                      example: 0
-                    localidad:
-                      $ref: '#/paths/~1refugios/post/requestBody/content/application~1json/schema/properties/localidad'
-                    estado:
-                      $ref: '#/paths/~1refugios/post/requestBody/content/application~1json/schema/properties/estado'
+                - $ref: '#/paths/~1adoptantes/post/responses/201/content/application~1json/schema'
               type: object
-              description: Un adoptante
               properties:
+                localidad:
+                  description: Nombre de la localidad
+                  type: string
+                  minLength: 3
+                  maxLength: 150
+                  example: Tlanelhuayocan
+                estado:
+                  description: Nombre del estado
+                  type: string
+                  minLength: 3
+                  maxLength: 50
+                  example: Veracruz
                 vivienda:
-                  type: object
-                  description: Informacion de una vivienda
-                  required:
-                    - id_vivienda
-                  properties:
-                    id_vivienda:
-                      description: Identificador de la vivienda
-                      type: integer
-                      format: int32
-                      minimum: 0
-                      maximum: 999
-                      example: 435
-                    tipo:
-                      description: Tipo de vivienda
-                      type: string
-                      minLength: 3
-                      maxLength: 100
-                      example: Un ranchito
+                  description: Tipo de vivienda
+                  type: string
+                  minLength: 3
+                  maxLength: 100
+                  example: Un ranchito
         required: true
       responses:
         '201':
@@ -210,7 +155,83 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1adoptantes/post/requestBody/content/application~1json/schema'
+                allOf:
+                  - type: object
+                    description: Una persona
+                    required:
+                      - nombre
+                      - sexo
+                    properties:
+                      id_persona:
+                        description: Identificador numerico del persona
+                        type: integer
+                        format: int32
+                        minimum: 1
+                        maximum: 999
+                        example: 34
+                      nombre:
+                        description: El nombre de la persona
+                        type: string
+                        minLength: 3
+                        maxLength: 40
+                        example: Miguel Joaquin
+                      apellido_paterno:
+                        description: El apellido paterno de la persona
+                        type: string
+                        minLength: 3
+                        maxLength: 35
+                        example: Perez
+                      apellido_materno:
+                        description: El apellido materno de la persona
+                        type: string
+                        minLength: 3
+                        maxLength: 35
+                        example: Arriaga
+                      telefono:
+                        $ref: '#/paths/~1refugios/post/responses/201/content/application~1json/schema/properties/telefono'
+                      email:
+                        $ref: '#/paths/~1refugios/post/responses/201/content/application~1json/schema/properties/email'
+                      password:
+                        description: Contraseña de la persona
+                        type: string
+                        minLength: 8
+                        maxLength: 32
+                        example: contraChida
+                      fecha_nacimiento:
+                        description: Fecha de nacimiento de la persona
+                        type: string
+                        format: date
+                        example: 1999-07-19T00:00:00.000Z
+                      sexo:
+                        description: Sexo de la persona
+                        type: boolean
+                        example: 0
+                      localidad:
+                        $ref: '#/paths/~1refugios/post/responses/201/content/application~1json/schema/properties/localidad'
+                      estado:
+                        $ref: '#/paths/~1refugios/post/responses/201/content/application~1json/schema/properties/estado'
+                type: object
+                description: Un adoptante
+                properties:
+                  vivienda:
+                    type: object
+                    description: Informacion de una vivienda
+                    required:
+                      - id_vivienda
+                    properties:
+                      id_vivienda:
+                        description: Identificador de la vivienda
+                        type: integer
+                        format: int32
+                        minimum: 0
+                        maximum: 999
+                        example: 435
+                      tipo:
+                        description: Tipo de vivienda
+                        type: string
+                        minLength: 3
+                        maxLength: 100
+                        example: Un ranchito
           links:
             ObtenerInfoAdoptante:
               operationId: obtenerAdoptante
@@ -261,7 +282,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1adoptantes/post/requestBody/content/application~1json/schema'
+                $ref: '#/paths/~1adoptantes/post/responses/201/content/application~1json/schema'
         '400':
           description: Peticion erronea o malformada
         '401':
@@ -296,14 +317,35 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/paths/~1adoptantes/post/requestBody/content/application~1json/schema'
+              allOf:
+                - $ref: '#/paths/~1adoptantes/post/responses/201/content/application~1json/schema'
+              type: object
+              properties:
+                localidad:
+                  description: Nombre de la localidad
+                  type: string
+                  minLength: 3
+                  maxLength: 150
+                  example: Tlanelhuayocan
+                estado:
+                  description: Nombre del estado
+                  type: string
+                  minLength: 3
+                  maxLength: 50
+                  example: Veracruz
+                vivienda:
+                  description: Tipo de vivienda
+                  type: string
+                  minLength: 3
+                  maxLength: 100
+                  example: Un ranchito
       responses:
         '200':
           description: Se ha actualizado la informacion del adoptante
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1adoptantes/post/requestBody/content/application~1json/schema'
+                $ref: '#/paths/~1adoptantes/post/responses/201/content/application~1json/schema'
         '400':
           description: Peticion erronea o malformada
         '401':
@@ -388,9 +430,9 @@ paths:
                 description: Arreglo de refugios
                 items:
                   anyOf:
-                    - $ref: '#/paths/~1refugios/post/requestBody/content/application~1json/schema'
-                    - $ref: '#/paths/~1refugios/post/requestBody/content/application~1json/schema'
-                    - $ref: '#/paths/~1refugios/post/requestBody/content/application~1json/schema'
+                    - $ref: '#/paths/~1refugios/post/responses/201/content/application~1json/schema'
+                    - $ref: '#/paths/~1refugios/post/responses/201/content/application~1json/schema'
+                    - $ref: '#/paths/~1refugios/post/responses/201/content/application~1json/schema'
         '204':
           description: No se ha encontrado ninguna coincidencia
         '400':
@@ -406,92 +448,22 @@ paths:
         content:
           application/json:
             schema:
+              allOf:
+                - $ref: '#/paths/~1refugios/post/responses/201/content/application~1json/schema'
               type: object
-              description: Un refugio para
-              required:
-                - nombre
               properties:
-                id_refugio:
-                  description: Identificador del refugio
-                  type: integer
-                  format: int32
-                  minimum: 0
-                  maximum: 999
-                  example: 62
-                nombre:
-                  description: Nombre del refugio
+                localidad:
+                  description: Nombre de la localidad
                   type: string
                   minLength: 3
-                  maxLength: 100
-                  example: Refugio patitas
-                estado:
-                  type: object
-                  description: Un estado de la republica
-                  required:
-                    - id_estado
-                  properties:
-                    id_estado:
-                      description: Identificador del estado
-                      type: integer
-                      format: int32
-                      minimum: 0
-                      maximum: 32
-                      example: 28
-                    estado:
-                      description: Nombre del estado
-                      type: string
-                      minLength: 3
-                      maxLength: 50
-                      example: Veracruz
-                localidad:
-                  type: object
-                  description: Localidad
-                  required:
-                    - id_localidad
-                  properties:
-                    id_localidad:
-                      description: Identificador de la localidad
-                      type: integer
-                      format: int32
-                      minimum: 0
-                      maximum: 999
-                      example: 12
-                    localidad:
-                      description: Nombre de la localidad
-                      type: string
-                      minLength: 3
-                      maxLength: 150
-                      example: Tlanelhuayocan
-                direccion:
-                  description: Direccion del refugio
-                  type: string
-                  minLength: 10
-                  maxLength: 200
-                  example: Calle Huitlacoche
-                pagina_web:
-                  description: Pagina web del refugio
-                  type: string
-                  minLength: 5
-                  maxLength: 200
-                  example: www.refugiopatitas.com
-                telefono:
-                  description: Numero telefonico
-                  type: string
-                  minLength: 8
-                  maxLength: 14
-                  example: 22 91 55 55 55
-                email:
-                  description: Direccion de correo
-                  type: string
-                  minLength: 5
-                  maxLength: 320
-                  example: correo@correo.com
-                fundacion:
-                  description: Fundacion a la cual pertenece el refugio
-                  type: string
-                  minLength: 5
                   maxLength: 150
-                  example: Ayuda a mastocas en necesidad
+                  example: Tlanelhuayocan
+                estado:
+                  description: Nombre del estado
+                  type: string
+                  minLength: 3
+                  maxLength: 50
+                  example: Veracruz
         required: true
       responses:
         '201':
@@ -499,7 +471,92 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1refugios/post/requestBody/content/application~1json/schema'
+                type: object
+                description: Un refugio para
+                required:
+                  - nombre
+                properties:
+                  id_refugio:
+                    description: Identificador del refugio
+                    type: integer
+                    format: int32
+                    minimum: 0
+                    maximum: 999
+                    example: 62
+                  nombre:
+                    description: Nombre del refugio
+                    type: string
+                    minLength: 3
+                    maxLength: 100
+                    example: Refugio patitas
+                  estado:
+                    type: object
+                    description: Un estado de la republica
+                    required:
+                      - id_estado
+                    properties:
+                      id_estado:
+                        description: Identificador del estado
+                        type: integer
+                        format: int32
+                        minimum: 0
+                        maximum: 32
+                        example: 28
+                      estado:
+                        description: Nombre del estado
+                        type: string
+                        minLength: 3
+                        maxLength: 50
+                        example: Veracruz
+                  localidad:
+                    type: object
+                    description: Localidad
+                    required:
+                      - id_localidad
+                    properties:
+                      id_localidad:
+                        description: Identificador de la localidad
+                        type: integer
+                        format: int32
+                        minimum: 0
+                        maximum: 999
+                        example: 12
+                      localidad:
+                        description: Nombre de la localidad
+                        type: string
+                        minLength: 3
+                        maxLength: 150
+                        example: Tlanelhuayocan
+                  direccion:
+                    description: Direccion del refugio
+                    type: string
+                    minLength: 10
+                    maxLength: 200
+                    example: Calle Huitlacoche
+                  pagina_web:
+                    description: Pagina web del refugio
+                    type: string
+                    minLength: 5
+                    maxLength: 200
+                    example: www.refugiopatitas.com
+                  telefono:
+                    description: Numero telefonico
+                    type: string
+                    minLength: 8
+                    maxLength: 14
+                    example: 22 91 55 55 55
+                  email:
+                    description: Direccion de correo
+                    type: string
+                    minLength: 5
+                    maxLength: 320
+                    example: correo@correo.com
+                  fundacion:
+                    description: Fundacion a la cual pertenece el refugio
+                    type: string
+                    minLength: 5
+                    maxLength: 150
+                    example: Ayuda a mastocas en necesidad
         '400':
           description: Peticion erronea o malformada
         '409':
@@ -546,7 +603,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1refugios/post/requestBody/content/application~1json/schema'
+                $ref: '#/paths/~1refugios/post/responses/201/content/application~1json/schema'
         '400':
           description: Peticion erronea o malformada
         '401':
@@ -582,14 +639,29 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/paths/~1refugios/post/requestBody/content/application~1json/schema'
+              allOf:
+                - $ref: '#/paths/~1refugios/post/responses/201/content/application~1json/schema'
+              type: object
+              properties:
+                localidad:
+                  description: Nombre de la localidad
+                  type: string
+                  minLength: 3
+                  maxLength: 150
+                  example: Tlanelhuayocan
+                estado:
+                  description: Nombre del estado
+                  type: string
+                  minLength: 3
+                  maxLength: 50
+                  example: Veracruz
       responses:
         '200':
           description: Se ha actualizado la informacion del refugio
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1refugios/post/requestBody/content/application~1json/schema'
+                $ref: '#/paths/~1refugios/post/responses/201/content/application~1json/schema'
         '400':
           description: Peticion erronea o malformada
         '401':
