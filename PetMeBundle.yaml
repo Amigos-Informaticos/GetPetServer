@@ -362,7 +362,7 @@ paths:
       operationId: eliminarAdoptante
       parameters:
         - name: id_adoptante
-          description: Id del adoptante cuya informacion se desea recuperar
+          description: Id del adoptante que se desea eliminar
           in: path
           schema:
             type: integer
@@ -701,5 +701,257 @@ paths:
           description: Usuario no autenticado
         '404':
           description: El adoptante indicado no se encuentra registrado
+        '419':
+          description: La sesion del usuario ha expirado
+  /mascotas:
+    description: Catalogo de mascotas registradas
+    get:
+      summary: Retorna las masctoas que coincidan con algun parametro
+      tags:
+        - Mascota
+      operationId: obtenerMascotas
+      parameters:
+        - name: nombre
+          description: Nombre de la mascota
+          in: query
+          schema:
+            type: string
+            minLength: 3
+            maxLength: 45
+          required: false
+        - name: sexo
+          description: Sexo de la mascota
+          in: query
+          schema:
+            type: boolean
+          required: false
+        - name: especie
+          description: Especie de la mascota
+          in: query
+          schema:
+            type: string
+            minLength: 3
+            maxLength: 40
+          required: false
+      responses:
+        '200':
+          description: Se ha encontrado por lo menos una mascota que coincide con algun criterio
+          content:
+            application/json:
+              schema:
+                type: array
+                description: Arreglo de masctoas
+                items:
+                  anyOf:
+                    - $ref: '#/paths/~1mascotas/post/requestBody/content/application~1json/schema'
+                    - $ref: '#/paths/~1mascotas/post/requestBody/content/application~1json/schema'
+        '204':
+          description: No se ha encontrado ninguna coincidencia
+        '400':
+          description: Peticion erronea o malformada
+    post:
+      summary: Registra una nueva mascota
+      tags:
+        - Mascota
+        - Registrar
+      operationId: registrarMascota
+      requestBody:
+        description: Informacion de la nueva mascota
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Una mascota
+              required:
+                - nombre
+              properties:
+                id_mascota:
+                  description: Identificador de la mascota
+                  type: integer
+                  format: int32
+                  minimum: 1
+                  maximum: 999
+                  example: 34
+                nombre:
+                  description: Nombre de la mascota
+                  type: string
+                  minLength: 3
+                  maxLength: 45
+                  example: Solovino
+                color:
+                  description: Color de la mascota
+                  type: string
+                  minLength: 3
+                  maxLength: 30
+                  example: doradito
+                sexo:
+                  description: Sexo de la mascota
+                  type: boolean
+                  example: 0
+                especie:
+                  description: Especie de la mascota
+                  type: string
+                  minLength: 3
+                  maxLength: 40
+                  example: Golden Retriever
+                edad:
+                  description: Edad de la mascota
+                  type: integer
+                  format: int32
+                  minimum: 0
+                  maximum: 999
+                  example: 12
+                peso:
+                  description: Peso de la mascota en kilogramos
+                  type: integer
+                  format: int32
+                  minimum: 0
+                  maximum: 999
+                  example: 0.98
+                tamanio:
+                  description: Tamaño de la mascota
+                  type: string
+                  minLength: 3
+                  maxLength: 30
+                  example: Grandecito
+                estado:
+                  description: Estado de la mascota
+                  type: string
+                  minLength: 3
+                  maxLength: 50
+                  example: Buenito
+        required: true
+      responses:
+        '201':
+          description: Mascota registrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1mascotas/post/requestBody/content/application~1json/schema'
+        '400':
+          description: Peticion erronea o malformada
+  '/mascotas/{id_mascota}':
+    description: Una mascota identificada por su id
+    get:
+      summary: Retorna la informacion de la mascota seleccionada
+      tags:
+        - Mascota
+      operationId: obtenerMascota
+      parameters:
+        - name: id_mascota
+          description: Id de la mascota cuya informacion se desea recuperar
+          in: path
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 999
+          required: true
+        - name: Token
+          description: Token identificador del adoptante loggeado
+          in: header
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: Datos solicitados de la mascota
+        content:
+          application/json:
+            schema:
+              type: array
+              description: Arreglo con los nombres de las propiedades que se desean obtener
+              items:
+                type: string
+              example:
+                - id_mascota
+                - nombre
+                - sexo
+      responses:
+        '200':
+          description: Se ha retornado la informacion correspondiente a la mascota
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1adoptantes/post/responses/201/content/application~1json/schema'
+        '400':
+          description: Peticion erronea o malformada
+        '401':
+          description: Usuario no autenticado
+        '404':
+          description: La masctoa buscada no se encuentra registrada
+        '419':
+          description: La sesion del usuario ha expirado
+    post:
+      summary: Actualiza la informacion de la mascota indicada
+      tags:
+        - Mascota
+        - Actualizar
+      operationId: actualizarMascota
+      parameters:
+        - name: id_mascota
+          description: Id de la mascota cuya informacion se desea actualizar
+          in: path
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 999
+          required: true
+        - name: Token
+          description: Token identificador del adoptante loggeado
+          in: header
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: Informacion actualizada de la mascota
+        content:
+          application/json:
+            schema:
+              $ref: '#/paths/~1mascotas/post/requestBody/content/application~1json/schema'
+      responses:
+        '200':
+          description: Se ha actualizado la informacion de la mascota
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1mascotas/post/requestBody/content/application~1json/schema'
+        '400':
+          description: Peticion erronea o malformada
+        '401':
+          description: Usuario no autenticado
+        '404':
+          description: La mascota no se encuentra registrada
+        '419':
+          description: La sesion del usuario ha expirado
+    delete:
+      summary: Elimina una mascota registrada
+      tags:
+        - Mascota
+        - Eliminar
+      operationId: eliminarMascota
+      parameters:
+        - name: id_mascota
+          description: Id de la mascota que se desea eliminar
+          in: path
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 999
+          required: true
+        - name: Token
+          description: Token identificador del adoptante loggeado
+          in: header
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Se ha eliminado la mascota indicada
+        '400':
+          description: Peticion erronea o malformada
+        '401':
+          description: Usuario no autenticado
+        '404':
+          description: La mascota no se encuentra registrada
         '419':
           description: La sesion del usuario ha expirado
