@@ -443,6 +443,13 @@ paths:
         - Refugio
         - Registrar
       operationId: registrarRefugio
+      parameters:
+        - name: Token
+          description: Token identificador del adoptante loggeado
+          in: header
+          schema:
+            type: string
+          required: true
       requestBody:
         description: Informacion del refugio que se desea registrar
         content:
@@ -472,7 +479,7 @@ paths:
             application/json:
               schema:
                 type: object
-                description: Un refugio para
+                description: Un refugio para mascotas
                 required:
                   - nombre
                 properties:
@@ -559,8 +566,12 @@ paths:
                     example: Ayuda a mastocas en necesidad
         '400':
           description: Peticion erronea o malformada
+        '401':
+          description: Usuario no autenticado
         '409':
           description: El refugio ya ha sido registrado previamente
+        '419':
+          description: La sesion del usuario ha expirado
   '/refugios/{id_refugio}':
     description: Un refugio identificado por su id
     get:
@@ -755,6 +766,21 @@ paths:
         - Mascota
         - Registrar
       operationId: registrarMascota
+      parameters:
+        - name: id_adoptante
+          description: Id del adoptante cuya informacion se desea recuperar
+          in: path
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 999
+          required: true
+        - name: Token
+          description: Token identificador del adoptante loggeado
+          in: header
+          schema:
+            type: string
+          required: true
       requestBody:
         description: Informacion de la nueva mascota
         content:
@@ -953,5 +979,121 @@ paths:
           description: Usuario no autenticado
         '404':
           description: La mascota no se encuentra registrada
+        '419':
+          description: La sesion del usuario ha expirado
+  /solicitudes:
+    description: Catalogo de solicitudes de adopcion
+    get:
+      summary: Retorna las solicitudes de adopcion que coincidan con algun parametro
+      tags:
+        - Adopcion
+      operationId: obtenerSolicitudes
+      parameters:
+        - name: nombreMascota
+          description: Nombre de la mascota solicitada
+          in: query
+          schema:
+            type: string
+            minLength: 3
+            maxLength: 40
+          required: false
+        - name: nombreAdoptante
+          description: Nombre del adoptante que solicita
+          in: query
+          schema:
+            type: string
+            minLength: 3
+            maxLength: 35
+          required: false
+        - name: estado
+          description: Estado de la solicitud
+          in: query
+          schema:
+            type: boolean
+          required: false
+        - name: Token
+          description: Token identificador del adoptante loggeado
+          in: header
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Se ha encontrado por lo menos una solicitud que coincide con algun criterio
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1solicitudes/post/requestBody/content/application~1json/schema'
+        '204':
+          description: No se ha encontrado ninguna coincidencia
+        '400':
+          description: Peticion erronea o malformada
+        '401':
+          description: Usuario no autenticado
+        '419':
+          description: La sesion del usuario ha expirado
+    post:
+      summary: Registra una nueva solicitud de adopcion
+      tags:
+        - Adopcion
+      operationId: solicitarAdopcion
+      parameters:
+        - name: Token
+          description: Token identificador del adoptante loggeado
+          in: header
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: Informacion de la solicitud
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Una solicitud de adopcion
+              required:
+                - id_persona
+                - id_mascota
+              properties:
+                id_solicitud:
+                  description: Identificador de la solicitud
+                  type: integer
+                  format: int32
+                  minimum: 1
+                  maximum: 999
+                  example: 12
+                id_persona:
+                  description: Identificador numerico del persona
+                  type: integer
+                  format: int32
+                  minimum: 1
+                  maximum: 999
+                  example: 34
+                id_mascota:
+                  description: Identificador de la mascota
+                  type: integer
+                  format: int32
+                  minimum: 1
+                  maximum: 999
+                  example: 34
+                estado:
+                  description: Estado de la solicitud
+                  type: string
+                  enum:
+                    - Pendiente
+                    - Cancelada
+                    - Aceptada
+        required: true
+      responses:
+        '201':
+          description: Solicitud registrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1solicitudes/post/requestBody/content/application~1json/schema'
+        '400':
+          description: Peticion erronea o malformada
+        '401':
+          description: Usuario no autenticado
         '419':
           description: La sesion del usuario ha expirado
