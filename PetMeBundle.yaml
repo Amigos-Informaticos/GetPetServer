@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: PetMeAPI
   description: Especificación de la API que expone los servicios provistos por el servidor de PetMe
-  version: 0.3.1
+  version: 0.5.1
   contact:
     name: Edson Manuel Carballo Vera
     email: edsonmanuelcarballovera@gmail.com
