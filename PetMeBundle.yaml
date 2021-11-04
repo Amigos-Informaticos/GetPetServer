@@ -264,18 +264,6 @@ paths:
           schema:
             type: string
           required: true
-      requestBody:
-        description: Datos solicitados del adoptante
-        content:
-          application/json:
-            schema:
-              type: array
-              description: Arreglo con los nombres de las propiedades que se desean retornar
-              items:
-                type: string
-              example:
-                - id_adoptante
-                - nombre
       responses:
         '200':
           description: Se ha retornado la informacion correspondiente al adoptante
@@ -378,6 +366,49 @@ paths:
       responses:
         '200':
           description: Se ha eliminado el adoptante indicado
+        '400':
+          description: Peticion erronea o malformada
+        '401':
+          description: Usuario no autenticado
+        '404':
+          description: El adoptante indicado no se encuentra registrado
+        '419':
+          description: La sesion del usuario ha expirado
+  '/adoptantes/{id_adoptante}/imagen':
+    description: Sube una imagen al perfil de un adoptante
+    post:
+      summary: Sube la imagen
+      tags:
+        - Adoptante
+        - Imagenes
+      operationId: imagenAdoptante
+      parameters:
+        - name: id_adoptante
+          description: Id del adoptante cuya informacion se desea recuperar
+          in: path
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 999
+          required: true
+        - name: Token
+          description: Token identificador del adoptante loggeado
+          in: header
+          schema:
+            type: string
+          required: true
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '226':
+          description: Se ha guardado la imagen de forma exitosa
         '400':
           description: Peticion erronea o malformada
         '401':
@@ -749,12 +780,6 @@ paths:
             minLength: 3
             maxLength: 45
           required: false
-        - name: sexo
-          description: Sexo de la mascota
-          in: query
-          schema:
-            type: boolean
-          required: false
         - name: especie
           description: Especie de la mascota
           in: query
@@ -763,18 +788,38 @@ paths:
             minLength: 3
             maxLength: 40
           required: false
+        - name: pagina
+          description: La pagina del catalogo
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+          required: false
       responses:
         '200':
           description: Se ha encontrado por lo menos una mascota que coincide con algun criterio
           content:
             application/json:
               schema:
-                type: array
-                description: Arreglo de masctoas
-                items:
-                  anyOf:
-                    - $ref: '#/paths/~1mascotas/post/requestBody/content/application~1json/schema'
-                    - $ref: '#/paths/~1mascotas/post/requestBody/content/application~1json/schema'
+                type: object
+                description: Mascotas y paginas
+                properties:
+                  mascotas:
+                    type: array
+                    description: Arreglo de mascotas
+                    items:
+                      anyOf:
+                        - $ref: '#/paths/~1mascotas/post/requestBody/content/application~1json/schema'
+                        - $ref: '#/paths/~1mascotas/post/requestBody/content/application~1json/schema'
+                  prev:
+                    type: string
+                    description: Pagina anterior del catalogo de refugios
+                    example: 'https://amigosinformaticos.ddns.net:42070/mascotas?pagina=2'
+                  sig:
+                    type: string
+                    description: Pagina siguiente del catalogo de refugios
+                    example: 'https://amigosinformaticos.ddns.net:42070/mascotas?pagina=4'
         '204':
           description: No se ha encontrado ninguna coincidencia
         '400':
@@ -865,6 +910,12 @@ paths:
                   minLength: 3
                   maxLength: 50
                   example: Buenito
+                raza_aparente:
+                  description: Raza aparente de la mascota
+                  type: string
+                  minLength: 3
+                  maxLength: 50
+                  example: Pastor Aleman
         required: true
       responses:
         '201':
@@ -898,19 +949,6 @@ paths:
           schema:
             type: string
           required: true
-      requestBody:
-        description: Datos solicitados de la mascota
-        content:
-          application/json:
-            schema:
-              type: array
-              description: Arreglo con los nombres de las propiedades que se desean obtener
-              items:
-                type: string
-              example:
-                - id_mascota
-                - nombre
-                - sexo
       responses:
         '200':
           description: Se ha retornado la informacion correspondiente a la mascota
