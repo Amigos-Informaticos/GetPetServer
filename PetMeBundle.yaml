@@ -447,6 +447,40 @@ paths:
           description: El adoptante indicado no se encuentra registrado
         '419':
           description: La sesion del usuario ha expirado
+    delete:
+      summary: Elimina la imagen de perfil del adoptante indicado
+      tags:
+        - Adoptante
+        - Imagenes
+      operationId: eliminarImagenAdoptante
+      parameters:
+        - name: id_adoptante
+          description: Id del adoptante cuya informacion se desea recuperar
+          in: path
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 999
+          required: true
+        - name: Token
+          description: Token identificador del adoptante loggeado
+          in: header
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Se ha eliminado la imagen de forma correcta
+        '204':
+          description: No habia ninguna imagen para borrar
+        '400':
+          description: Peticion erronea o malformada
+        '401':
+          description: Usuario no autenticado
+        '404':
+          description: El adoptante indicado no se encuentra registrado
+        '419':
+          description: La sesion del usuario ha expirado
   /refugios:
     description: Catalogo de refugios registrados
     get:
@@ -1066,6 +1100,131 @@ paths:
           description: Usuario no autenticado
         '404':
           description: La mascota no se encuentra registrada
+        '419':
+          description: La sesion del usuario ha expirado
+  '/mascotas/{id_mascota}/imagen':
+    description: Añadir una imagen al catalogo de imagenes de una mascota
+    post:
+      summary: Agrega una imagen a una mascota
+      tags:
+        - Mascota
+        - Imagenes
+      operationId: agregarImagenMascota
+      parameters:
+        - name: id_mascota
+          description: Id de la mascota a la cual se desea agragar una imagen
+          in: path
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 999
+          required: true
+        - name: Token
+          description: Token identificador del adoptante loggeado
+          in: header
+          schema:
+            type: string
+          required: true
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '226':
+          description: Se ha guardado la imagen de forma exitosa
+        '400':
+          description: Peticion erronea o malformada
+        '401':
+          description: Usuario no autenticado
+        '404':
+          description: La mascota indicado no se encuentra registrada
+        '419':
+          description: La sesion del usuario ha expirado
+  '/mascotas/{id_mascota}/imagen/{id_imagen}':
+    description: Catalogo de imagenes de una mascota
+    get:
+      summary: Recupera una imagen de una mascota
+      tags:
+        - Mascota
+        - Imagenes
+      operationId: obtenerImagenMascota
+      parameters:
+        - name: id_mascota
+          description: Id de la mascota cuya imagen se desea recuperar
+          in: path
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 999
+          required: true
+        - name: id_imagen
+          description: Id de la imagen de la mascota que se desea recuperar
+          in: path
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 999
+          required: true
+        - name: Token
+          description: Token identificador del adoptante loggeado
+          in: header
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Se ha retornado la imagen de la mascota indicada
+        '204':
+          description: La mascota indicada no tiene ninguna imagen
+        '400':
+          description: Peticion erronea o malformada
+        '404':
+          description: La mascota indicada no se encuentra registrada
+    delete:
+      summary: Elimina una imagen de una mascota
+      tags:
+        - Mascota
+        - Imagenes
+      operationId: eliminarImagenMascota
+      parameters:
+        - name: id_mascota
+          description: Id de la mascota cuya imagen se desea recuperar
+          in: path
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 999
+          required: true
+        - name: id_imagen
+          description: Id de la imagen de la mascota que se desea recuperar
+          in: path
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 999
+          required: true
+        - name: Token
+          description: Token identificador del adoptante loggeado
+          in: header
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Se ha eliminado la imagen de forma correcta
+        '204':
+          description: No habia ninguna imagen para borrar
+        '400':
+          description: Peticion erronea o malformada
+        '401':
+          description: Usuario no autenticado
+        '404':
+          description: El adoptante indicado no se encuentra registrado
         '419':
           description: La sesion del usuario ha expirado
   /solicitudes:
