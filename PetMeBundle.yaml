@@ -433,7 +433,7 @@ paths:
             schema:
               type: object
               properties:
-                file:
+                imagen:
                   type: string
                   format: binary
       responses:
@@ -1019,7 +1019,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1adoptantes/post/responses/201/content/application~1json/schema'
+                type: object
+                allOf:
+                  - $ref: '#/paths/~1adoptantes/post/responses/201/content/application~1json/schema'
+                properties:
+                  imagenes:
+                    type: array
+                    items:
+                      type: string
         '400':
           description: Peticion erronea o malformada
         '401':
@@ -1131,7 +1138,7 @@ paths:
             schema:
               type: object
               properties:
-                file:
+                imagen:
                   type: string
                   format: binary
       responses:
