@@ -375,13 +375,43 @@ paths:
         '419':
           description: La sesion del usuario ha expirado
   '/adoptantes/{id_adoptante}/imagen':
-    description: Sube una imagen al perfil de un adoptante
+    description: La imagen al perfil de un adoptante
+    get:
+      summary: Recupera la imagen de perfil del adoptante
+      tags:
+        - Adoptante
+        - Imagenes
+      operationId: obtenerImagenAdoptante
+      parameters:
+        - name: id_adoptante
+          description: Id del adoptante cuya informacion se desea recuperar
+          in: path
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 999
+          required: true
+        - name: Token
+          description: Token identificador del adoptante loggeado
+          in: header
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Se ha retornado la imagen del adoptante indicado
+        '204':
+          description: El adoptante indicado no tiene ninguna imagen de perfil
+        '400':
+          description: Peticion erronea o malformada
+        '404':
+          description: El adoptante indicado no se encuentra registrado
     post:
       summary: Sube la imagen
       tags:
         - Adoptante
         - Imagenes
-      operationId: imagenAdoptante
+      operationId: subirImagenAdoptante
       parameters:
         - name: id_adoptante
           description: Id del adoptante cuya informacion se desea recuperar
