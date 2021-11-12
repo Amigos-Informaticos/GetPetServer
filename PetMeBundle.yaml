@@ -210,6 +210,10 @@ paths:
                         $ref: '#/paths/~1refugios/post/responses/201/content/application~1json/schema/properties/localidad'
                       estado:
                         $ref: '#/paths/~1refugios/post/responses/201/content/application~1json/schema/properties/estado'
+                      imagen:
+                        description: URL de la imagen del adoptante
+                        type: string
+                        example: 'https://amigosinformaticos.ddns.net:42070/adoptantes/91/imagen'
                 type: object
                 description: Un adoptante
                 properties:
@@ -678,6 +682,13 @@ paths:
                     minLength: 5
                     maxLength: 150
                     example: Ayuda a mastocas en necesidad
+                  imagenes:
+                    description: Arreglo de URLs de las imagenes de la mascota
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - 'https://amigosinformaticos.ddns.net:42070/refugios/91/imagen/2'
         '400':
           description: Peticion erronea o malformada
         '401':
@@ -1105,6 +1116,13 @@ paths:
                   minLength: 3
                   maxLength: 50
                   example: Pastor Aleman
+                imagenes:
+                  description: Arreglo de URLs de las imagenes de la mascota
+                  type: array
+                  items:
+                    type: string
+                  example:
+                    - 'https://amigosinformaticos.ddns.net:42070/mascotas/91/imagen/3'
         required: true
       responses:
         '201':
