@@ -1031,14 +1031,6 @@ paths:
         - Registrar
       operationId: registrarMascota
       parameters:
-        - name: id_adoptante
-          description: Id del adoptante cuya informacion se desea recuperar
-          in: path
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 999
-          required: true
         - name: Token
           description: Token identificador del adoptante loggeado
           in: header
