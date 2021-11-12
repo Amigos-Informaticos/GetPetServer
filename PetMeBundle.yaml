@@ -828,6 +828,131 @@ paths:
           description: El adoptante indicado no se encuentra registrado
         '419':
           description: La sesion del usuario ha expirado
+  '/refugios/{id_refugio}/imagen':
+    description: Añadir una imagen al catalogo de imagenes de una mascota
+    post:
+      summary: Agrega una imagen a un refugio identificado por su id
+      tags:
+        - Refugio
+        - Imagenes
+      operationId: agregarImagenRefugio
+      parameters:
+        - name: id_refugio
+          description: Id del refugio al cual se desea agragar una imagen
+          in: path
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 999
+          required: true
+        - name: Token
+          description: Token identificador del adoptante loggeado
+          in: header
+          schema:
+            type: string
+          required: true
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                imagen:
+                  type: string
+                  format: binary
+      responses:
+        '226':
+          description: Se ha guardado la imagen de forma exitosa
+        '400':
+          description: Peticion erronea o malformada
+        '401':
+          description: Usuario no autenticado
+        '404':
+          description: La mascota indicado no se encuentra registrada
+        '419':
+          description: La sesion del usuario ha expirado
+  '/refugios/{id_refugio}/imagen/{id_imagen}':
+    description: Catalogo de imagenes de un refugio
+    get:
+      summary: Recupera una imagen de un refugio
+      tags:
+        - Refugio
+        - Imagenes
+      operationId: obtenerImagenRefugio
+      parameters:
+        - name: id_refugio
+          description: Id del refugio cuya imagen se desea recuperar
+          in: path
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 999
+          required: true
+        - name: id_imagen
+          description: Id de la imagen del refugio que se desea recuperar
+          in: path
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 999
+          required: true
+        - name: Token
+          description: Token identificador del adoptante loggeado
+          in: header
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Se ha retornado la imagen de la mascota indicada
+        '204':
+          description: La mascota indicada no tiene ninguna imagen
+        '400':
+          description: Peticion erronea o malformada
+        '404':
+          description: La mascota indicada no se encuentra registrada
+    delete:
+      summary: Elimina una imagen de un refugio
+      tags:
+        - Refugio
+        - Imagenes
+      operationId: eliminarImagenRefugio
+      parameters:
+        - name: id_mascota
+          description: Id del refugio cuya imagen se desea recuperar
+          in: path
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 999
+          required: true
+        - name: id_imagen
+          description: Id de la imagen del refugio que se desea recuperar
+          in: path
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 999
+          required: true
+        - name: Token
+          description: Token identificador del adoptante loggeado
+          in: header
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Se ha eliminado la imagen de forma correcta
+        '204':
+          description: No habia ninguna imagen para borrar
+        '400':
+          description: Peticion erronea o malformada
+        '401':
+          description: Usuario no autenticado
+        '404':
+          description: El adoptante indicado no se encuentra registrado
+        '419':
+          description: La sesion del usuario ha expirado
   /mascotas:
     description: Catalogo de mascotas registradas
     get:
