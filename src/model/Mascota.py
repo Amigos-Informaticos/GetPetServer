@@ -19,16 +19,12 @@ class Mascota:
 		self.tamanio = None
 		self.estado = None
 		self.raza_aparente = None
-		self.esterilizada = None
-		self.desparacitada = None
-		self.discapacitada = None
-		self.descripcion = None
 		self.conexion = EasyConnection.build_from_static()
 
 	def guardar(self) -> int:
 		estado = BAD_REQUEST
 		if self.nombre is not None:
-			query = "CALL SPI_registrarMascota(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+			query = "CALL SPI_registrarMascota(%s, %s, %s, %s, %s, %s, %s, %s, %s)"
 			valores = [
 				self.nombre,
 				self.color,
@@ -38,11 +34,7 @@ class Mascota:
 				self.peso,
 				self.tamanio,
 				self.estado,
-				self.raza_aparente,
-				self.esterilizada,
-				self.desparacitada,
-				self.discapacitada,
-				self.descripcion
+				self.raza_aparente
 			]
 			resultado = self.conexion.select(query, valores)
 			if resultado:
@@ -57,7 +49,7 @@ class Mascota:
 	def actualizar(self) -> int:
 		estado = BAD_REQUEST
 		if self.id_mascota is not None:
-			query = "CALL SPA_actualizarMascota(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+			query = "CALL SPA_actualizarMascota(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 			valores = [
 				self.id_mascota,
 				self.nombre,
@@ -68,11 +60,7 @@ class Mascota:
 				self.peso,
 				self.tamanio,
 				self.estado,
-				self.raza_aparente,
-				self.esterilizada,
-				self.desparacitada,
-				self.discapacitada,
-				self.descripcion
+				self.raza_aparente
 			]
 			estado = NOT_FOUND
 			if self.conexion.send_query(query, valores):

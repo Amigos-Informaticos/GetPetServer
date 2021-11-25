@@ -247,19 +247,6 @@ components:
           minLength: 3
           maxLength: 50
           example: Pastor Aleman
-        esterilizada:
-          description: Si la mascota está o no esterilizada
-          type: boolean
-        desparacitada:
-          description: Si la mascota está desparacitada
-          type: boolean
-        discapacitada:
-          description: Si la mascota está discapacitada
-          type: boolean
-        descripcion:
-          description: Una descripcion breve de la situacion medica de la mascota
-          type: string
-          example: La mascota se encuentra bien de salud. Le faltan 3 patitas pero todo lo demas bien.
         imagenes:
           description: Arreglo de URLs de las imagenes de la mascota
           type: array
