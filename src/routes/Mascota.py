@@ -3,6 +3,7 @@ import json
 
 from flask import Blueprint, Response, request, send_file
 
+from src.model.Adoptante import Adoptante
 from src.model.Mascota import Mascota
 from src.routes.Auth import Auth
 from src.routes.HTTPStatus import NOT_ACCEPTABLE, NOT_FOUND, NO_CONTENT, OK, RESOURCE_CREATED
@@ -15,7 +16,15 @@ rutas_mascota = Blueprint("rutas_mascota", __name__)
 def registrar_mascota():
 	respuesta = Response(status=NOT_ACCEPTABLE)
 	if "nombre" in request.json:
+		token = request.headers.get("Token")
+		email = Auth.decode_token(token)["email"]
+
+		adoptante = Adoptante()
+		adoptante.email = email
+		adoptante.cargar_adoptante()
 		vals = request.json
+
+		vals["registrador"] = adoptante.id_adoptante
 		mascota = Mascota()
 		mascota.cargar_de_json(vals)
 		estado = mascota.guardar()

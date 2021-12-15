@@ -260,6 +260,12 @@ components:
           description: Una descripcion breve de la situacion medica de la mascota
           type: string
           example: La mascota se encuentra bien de salud. Le faltan 3 patitas pero todo lo demas bien.
+        registrador:
+          description: Id de la persona que registró la mascota
+          type: integer
+          minimum: 1
+          maximum: 999
+          example: 26
         imagenes:
           description: Arreglo de URLs de las imagenes de la mascota
           type: array
