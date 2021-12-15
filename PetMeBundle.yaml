@@ -1424,7 +1424,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/paths/~1solicitudes/post/requestBody/content/application~1json/schema'
+                type: array
+                items:
+                  anyOf:
+                    - $ref: '#/paths/~1solicitudes/post/requestBody/content/application~1json/schema'
+                    - $ref: '#/paths/~1solicitudes/post/requestBody/content/application~1json/schema'
+                    - $ref: '#/paths/~1solicitudes/post/requestBody/content/application~1json/schema'
         '204':
           description: No se ha encontrado ninguna coincidencia
         '400':
@@ -1498,3 +1503,68 @@ paths:
           description: Usuario no autenticado
         '419':
           description: La sesion del usuario ha expirado
+  '/solicitudes/{id_adoptante}':
+    description: Catalogo de solicitudes de un adoptante
+    get:
+      summary: Retorna las solicitudes de adopcion de un adoptante identificado por su ID
+      tags:
+        - Adopcion
+      operationId: obtenerSolicitudesAdoptante
+      parameters:
+        - name: id_adoptante
+          description: Id del adoptante
+          in: path
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 999
+          required: true
+      responses:
+        '200':
+          description: Se ha encontrado por lo menos una solicitud del adoptante indicado
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  anyOf:
+                    - $ref: '#/paths/~1solicitudes/post/requestBody/content/application~1json/schema'
+                    - $ref: '#/paths/~1solicitudes/post/requestBody/content/application~1json/schema'
+                    - $ref: '#/paths/~1solicitudes/post/requestBody/content/application~1json/schema'
+        '204':
+          description: No se ha encontrado ninguna solicitud asociada a este adoptante
+        '401':
+          description: Usuario no autenticado
+        '404':
+          description: El adoptante indicado no se encuentra registrado
+        '419':
+          description: La sesion del usuario ha expirado
+  '/solicitudes/{id_adoptante}/{id_mascota}':
+    description: Una solicitud de adopcion de una mascota y un adoptante especificos
+    delete:
+      summary: Elimina una solicitud de un adoptante y una mascota especificos
+      tags:
+        - Adopcion
+      operationId: eliminarSolicitud
+      parameters:
+        - name: id_adoptante
+          description: Id del adoptante
+          in: path
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 999
+          required: true
+        - name: id_mascota
+          description: Id de la mascota
+          in: path
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 999
+          required: true
+      responses:
+        '200':
+          description: Se ha eliminado la solicitud de adopcion
+        '404':
+          description: No se ha encontrado una solicitud del adoptante a la mascota indicada
